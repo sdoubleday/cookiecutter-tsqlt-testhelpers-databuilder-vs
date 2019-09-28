@@ -1,0 +1,8 @@
+{
+    "schema_test_helper": "TestHelpers",
+    "delimiter": "_",
+    "schema_of_object": "",
+    "object_to_populate": "",
+    "databuilder_name": "DataBuilder_{{cookiecutter.schema_test_helper}}{{cookiecutter.delimiter}}{{cookiecutter.object_to_populate}}",
+    "Instructions": "Cancel the 'Save changes to the following items?' prompt."
+}

@@ -59,4 +59,4 @@ $adp.Fill($data) | Out-Null;
 #Because we are rebels! Or, really because Visula Studio is expecting this filepath to exist and be a sql script.
 New-Item -ItemType File -Force $($PSCommandPath -replace 'ps1', 'sql');
 
-$data.Tables[0] | Out-String | Add-Content -Path $($PSCommandPath -replace 'ps1', 'sql') -Encoding UTF8;
+$data.Tables[0] | Select-Object -ExpandProperty Column1 | Out-String | Add-Content -Path $($PSCommandPath -replace 'ps1', 'sql') -Encoding UTF8;

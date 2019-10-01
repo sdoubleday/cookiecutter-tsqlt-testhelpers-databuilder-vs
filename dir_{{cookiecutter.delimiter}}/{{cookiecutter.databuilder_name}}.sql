@@ -31,8 +31,8 @@ UNION ALL
 SELECT CASE WHEN Ordinal_Position = 1 THEN ' ' ELSE ',' END +
 '['+column_name+']' AS InsertIntoList 
  FROM Information_Schema.COLUMNS
-	   WHERE TABLE_NAME LIKE 'bobbobob'
-	   AND TABLE_SCHEMA LIKE 'dbo'
+	   WHERE TABLE_NAME LIKE '{{cookiecutter.object_to_populate}}'
+	   AND TABLE_SCHEMA LIKE '{{cookiecutter.schema_of_object}}'
 UNION ALL
 SELECT ') SELECT'
 UNION ALL
@@ -41,7 +41,7 @@ CASE WHEN Ordinal_Position = 1 THEN ' ' ELSE ',' END +
 '@'+REPLACE(column_name,' ','_')
 AS SelectClause
        FROM Information_Schema.COLUMNS
-	   WHERE TABLE_NAME LIKE 'bobbobob'
+	   WHERE TABLE_NAME LIKE '{{cookiecutter.object_to_populate}}'
 	   AND TABLE_SCHEMA LIKE '{{cookiecutter.schema_of_object}}'
 UNION ALL
 SELECT 'RETURN 0'

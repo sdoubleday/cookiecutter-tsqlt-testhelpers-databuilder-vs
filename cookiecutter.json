@@ -3,6 +3,8 @@
     "delimiter": "_",
     "schema_of_object": "",
     "object_to_populate": "",
+    "database_to_query_column_list": "By default, ..\..\*.sqlproj",
+    "server_to_query_column_list": "(localdb)\ProjectsV13",
     "databuilder_name": "DataBuilder_{{cookiecutter.schema_test_helper}}{{cookiecutter.delimiter}}{{cookiecutter.object_to_populate}}",
     "Instructions": "Cancel the 'Save changes to the following items?' prompt."
 }

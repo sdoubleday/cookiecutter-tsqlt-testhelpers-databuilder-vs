@@ -1,11 +1,11 @@
 ﻿#https://www.sqlshack.com/connecting-powershell-to-sql-server/
 
-$sqlConn = New-Object System.Data.SqlClient.SqlConnection
-$sqlConn.ConnectionString = “Server={{cookiecutter.server_to_query_column_list}};Integrated Security=true;Initial Catalog={{cookiecutter.database_to_query_column_list}}”
-$sqlConn.Open()
+$sqlConn = New-Object System.Data.SqlClient.SqlConnection;
+$sqlConn.ConnectionString = “Server={{cookiecutter.server_to_query_column_list}};Integrated Security=true;Initial Catalog={{cookiecutter.database_to_query_column_list}}”;
+$sqlConn.Open();
 
 
-$sqlcmd = New-Object System.Data.SqlClient.SqlCommand
+$sqlcmd = New-Object System.Data.SqlClient.SqlCommand;
 $sqlcmd.Connection = $sqlConn
 $query = @“
 SELECT 'CREATE PROCEDURE [{{cookiecutter.schema_test_helper}}].[{{cookiecutter.databuilder_name}}]'
@@ -47,13 +47,16 @@ UNION ALL
 SELECT 'RETURN 0'
 UNION ALL
 SELECT ''
-"@
+"@;
 
-$sqlcmd.CommandText = $query
+$sqlcmd.CommandText = $query;
 
-$adp = New-Object System.Data.SqlClient.SqlDataAdapter $sqlcmd
+$adp = New-Object System.Data.SqlClient.SqlDataAdapter $sqlcmd;
 
-$data = New-Object System.Data.DataSet
-$adp.Fill($data) | Out-Null
+$data = New-Object System.Data.DataSet;
+$adp.Fill($data) | Out-Null;
 
-$data.Tables[0]
+#Because we are rebels! Or, really because Visula Studio is expecting this filepath to exist and be a sql script.
+New-Item -ItemType File -Force $PSCommandPath;
+
+$data.Tables[0] | Add-Content -Path $PSCommandPath -Encoding UTF8;

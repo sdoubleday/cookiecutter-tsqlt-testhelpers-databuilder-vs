@@ -1,9 +1,9 @@
 {
     "schema_test_helper": "TestHelpers",
     "delimiter": "_",
-    "schema_of_object": "",
+    "schema_of_object": "dbo",
     "object_to_populate": "",
-    "database_to_query_column_list": "By default, ..\..\*.sqlproj",
+    "database_to_query_column_list": "Where is the object to populate deployed?",
     "server_to_query_column_list": "(localdb)\ProjectsV13",
     "databuilder_name": "DataBuilder_{{cookiecutter.schema_of_object}}{{cookiecutter.delimiter}}{{cookiecutter.object_to_populate}}",
     "Instructions": "Cancel the 'Save changes to the following items?' prompt."

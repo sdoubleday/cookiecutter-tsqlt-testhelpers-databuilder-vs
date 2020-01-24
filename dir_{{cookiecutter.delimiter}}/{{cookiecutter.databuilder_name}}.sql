@@ -26,7 +26,15 @@ CASE WHEN Ordinal_Position = 1 THEN ' ' ELSE ',' END +
 	   WHERE TABLE_NAME LIKE '{{cookiecutter.object_to_populate}}'
 	   AND TABLE_SCHEMA LIKE '{{cookiecutter.schema_of_object}}'
 UNION ALL
-SELECT DISTINCT 'AS INSERT INTO [{{cookiecutter.schema_of_object}}].[{{cookiecutter.object_to_populate}}]('
+SELECT DISTINCT 'AS 
+
+IF OBJECT_ID('tempdb..[#{{cookiecutter.databuilder_name}}]') IS NOT NULL
+BEGIN
+	DROP TABLE [#{{cookiecutter.databuilder_name}}];
+END
+SELECT TOP 0 * INTO [#{{cookiecutter.databuilder_name}}] FROM [{{cookiecutter.schema_of_object}}].[{{cookiecutter.object_to_populate}}];
+
+INSERT INTO [#{{cookiecutter.databuilder_name}}]('
 UNION ALL
 SELECT CASE WHEN Ordinal_Position = 1 THEN ' ' ELSE ',' END +
 '['+column_name+']' AS InsertIntoList 
@@ -44,7 +52,10 @@ AS SelectClause
 	   WHERE TABLE_NAME LIKE '{{cookiecutter.object_to_populate}}'
 	   AND TABLE_SCHEMA LIKE '{{cookiecutter.schema_of_object}}'
 UNION ALL
-SELECT 'RETURN 0'
+SELECT ';
+DECLARE @sql NVARCHAR(MAX) = N''INSERT INTO [{{cookiecutter.schema_of_object}}].[{{cookiecutter.object_to_populate}}] SELECT * FROM [#{{cookiecutter.databuilder_name}}];'';
+EXECUTE sp_executesql @sql;
+RETURN 0'
 UNION ALL
 SELECT ''
 "@;

@@ -28,7 +28,7 @@ CASE WHEN Ordinal_Position = 1 THEN ' ' ELSE ',' END +
 UNION ALL
 SELECT DISTINCT 'AS 
 
-IF OBJECT_ID('tempdb..[#{{cookiecutter.databuilder_name}}]') IS NOT NULL
+IF OBJECT_ID(''tempdb..[#{{cookiecutter.databuilder_name}}]'') IS NOT NULL
 BEGIN
 	DROP TABLE [#{{cookiecutter.databuilder_name}}];
 END

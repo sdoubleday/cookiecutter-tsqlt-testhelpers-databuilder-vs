@@ -7,7 +7,7 @@ $sqlConn.Open();
 
 $sqlcmd = New-Object System.Data.SqlClient.SqlCommand;
 $sqlcmd.Connection = $sqlConn
-$query = @“
+$query = @"
 SELECT 'CREATE PROCEDURE [{{cookiecutter.schema_test_helper}}].[{{cookiecutter.databuilder_name}}]'
 UNION ALL
 SELECT

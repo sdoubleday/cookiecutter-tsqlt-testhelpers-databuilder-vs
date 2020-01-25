@@ -60,6 +60,8 @@ UNION ALL
 SELECT ''
 "@;
 
+Out-Host $query;
+
 $sqlcmd.CommandText = $query;
 
 $adp = New-Object System.Data.SqlClient.SqlDataAdapter $sqlcmd;

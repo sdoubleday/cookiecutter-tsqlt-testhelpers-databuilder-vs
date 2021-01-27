@@ -25,6 +25,8 @@ CASE WHEN Ordinal_Position = 1 THEN ' ' ELSE ',' END +
  FROM Information_Schema.COLUMNS
 	   WHERE TABLE_NAME LIKE '{{cookiecutter.object_to_populate}}'
 	   AND TABLE_SCHEMA LIKE '{{cookiecutter.schema_of_object}}'
+       AND DATA_TYPE NOT LIKE 'rowversion'
+       AND DATA_TYPE NOT LIKE 'timestamp'
 UNION ALL
 SELECT DISTINCT 'AS 
 
@@ -32,7 +34,17 @@ IF OBJECT_ID(''tempdb..[#{{cookiecutter.databuilder_name}}]'') IS NOT NULL
 BEGIN
 	DROP TABLE [#{{cookiecutter.databuilder_name}}];
 END
-SELECT TOP 0 * INTO [#{{cookiecutter.databuilder_name}}] FROM [{{cookiecutter.schema_of_object}}].[{{cookiecutter.object_to_populate}}];
+SELECT TOP 0 '
+UNION ALL
+SELECT CASE WHEN Ordinal_Position = 1 THEN ' ' ELSE ',' END +
+'['+column_name+']' AS InsertIntoList 
+ FROM Information_Schema.COLUMNS
+	   WHERE TABLE_NAME LIKE '{{cookiecutter.object_to_populate}}'
+	   AND TABLE_SCHEMA LIKE '{{cookiecutter.schema_of_object}}'
+       AND DATA_TYPE NOT LIKE 'rowversion'
+       AND DATA_TYPE NOT LIKE 'timestamp'
+UNION ALL
+SELECT ' INTO [#{{cookiecutter.databuilder_name}}] FROM [{{cookiecutter.schema_of_object}}].[{{cookiecutter.object_to_populate}}];
 
 INSERT INTO [#{{cookiecutter.databuilder_name}}]('
 UNION ALL
@@ -41,6 +53,8 @@ SELECT CASE WHEN Ordinal_Position = 1 THEN ' ' ELSE ',' END +
  FROM Information_Schema.COLUMNS
 	   WHERE TABLE_NAME LIKE '{{cookiecutter.object_to_populate}}'
 	   AND TABLE_SCHEMA LIKE '{{cookiecutter.schema_of_object}}'
+       AND DATA_TYPE NOT LIKE 'rowversion'
+       AND DATA_TYPE NOT LIKE 'timestamp'
 UNION ALL
 SELECT ') SELECT'
 UNION ALL
@@ -51,9 +65,33 @@ AS SelectClause
        FROM Information_Schema.COLUMNS
 	   WHERE TABLE_NAME LIKE '{{cookiecutter.object_to_populate}}'
 	   AND TABLE_SCHEMA LIKE '{{cookiecutter.schema_of_object}}'
+       AND DATA_TYPE NOT LIKE 'rowversion'
+       AND DATA_TYPE NOT LIKE 'timestamp'
 UNION ALL
 SELECT ';
-DECLARE @sql NVARCHAR(MAX) = N''INSERT INTO [{{cookiecutter.schema_of_object}}].[{{cookiecutter.object_to_populate}}] SELECT * FROM [#{{cookiecutter.databuilder_name}}];'';
+DECLARE @sql NVARCHAR(MAX) = N''INSERT INTO [{{cookiecutter.schema_of_object}}].[{{cookiecutter.object_to_populate}}] (
+'
+UNION ALL
+SELECT CASE WHEN Ordinal_Position = 1 THEN ' ' ELSE ',' END +
+'['+column_name+']' AS InsertIntoList 
+ FROM Information_Schema.COLUMNS
+	   WHERE TABLE_NAME LIKE '{{cookiecutter.object_to_populate}}'
+	   AND TABLE_SCHEMA LIKE '{{cookiecutter.schema_of_object}}'
+       AND DATA_TYPE NOT LIKE 'rowversion'
+       AND DATA_TYPE NOT LIKE 'timestamp'
+UNION ALL
+SELECT '
+) SELECT '
+UNION ALL
+SELECT CASE WHEN Ordinal_Position = 1 THEN ' ' ELSE ',' END +
+'['+column_name+']' AS InsertIntoList 
+ FROM Information_Schema.COLUMNS
+	   WHERE TABLE_NAME LIKE '{{cookiecutter.object_to_populate}}'
+	   AND TABLE_SCHEMA LIKE '{{cookiecutter.schema_of_object}}'
+       AND DATA_TYPE NOT LIKE 'rowversion'
+       AND DATA_TYPE NOT LIKE 'timestamp'
+UNION ALL
+SELECT ' FROM [#{{cookiecutter.databuilder_name}}];'';
 EXECUTE sp_executesql @sql;
 RETURN 0'
 UNION ALL
